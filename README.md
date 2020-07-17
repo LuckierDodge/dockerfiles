@@ -4,7 +4,7 @@ One repo to rule the Dockerfiles, one repo to find them, one repo to bring them 
 
 # How Do?
 
-Make sure you've installed Docker and Docker Compose, then run `docker-compose up`. Boom, done.
+Make sure you've installed Docker and Docker Compose, then run `docker-compose up -d`. Boom, done.
 
 # Looking for More?
 
