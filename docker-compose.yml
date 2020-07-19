@@ -1,43 +1,58 @@
 version: '2'
 services:
-  plex:
-    container_name: plex
-    image: plexinc/pms-docker
-    restart: unless-stopped
-    network_mode: host
-    #    ports:
-    #      - 32400:32400/tcp
-    #      - 3005:3005/tcp
-    #      - 8324:8324/tcp
-    #      - 32469:32469/tcp
-    #      - 1900:1900/udp
-    #      - 32410:32410/udp
-    #      - 32412:32412/udp
-    #      - 32413:32413/udp
-    #      - 32414:32414/udp
-    environment:
-      - TZ=America/Chicago
-      - PLEX_CLAIM=<https://www.plex.tv/claim>
-      - ADVERTISE_IP=http://192.168.1.51:32400/
-      - PLEX_UID=1000
-      - PLEX_GID=1000
-    hostname: installation04
-    volumes:
-      - /home/luckierdodge/data/plex/config:/config
-      - /home/luckierdodge/data/plex/transcode:/transcode
-      - /home/luckierdodge/data/media:/data
-  sonarr:
-    image: linuxserver/sonarr
-    container_name: sonarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-      - UMASK_SET=022
-    volumes:
-      - /home/luckierdodge/data/sonarr/config:/config
-      - /home/luckierdodge/data/media:/media
-        # ports:
-        #   - 8989:8989
-    network_mode: host
-    restart: unless-stopped
+    plex:
+        container_name: plex
+        image: plexinc/pms-docker
+        restart: unless-stopped
+        network_mode: host
+        environment:
+          - TZ=America/Chicago
+          - PLEX_CLAIM=<https://www.plex.tv/claim>
+          - ADVERTISE_IP=http://192.168.1.51:32400/
+          - PLEX_UID=1000
+          - PLEX_GID=1000
+        hostname: installation04
+        volumes:
+          - /home/luckierdodge/data/plex/config:/config
+          - /home/luckierdodge/data/plex/transcode:/transcode
+          - /home/luckierdodge/data/media:/data
+    sonarr:
+        image: linuxserver/sonarr
+        container_name: sonarr
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/Chicago
+            - UMASK_SET=022
+        volumes:
+            - /home/luckierdodge/data/sonarr/config:/config
+            - /home/luckierdodge/data/media:/media
+        network_mode: host
+        restart: unless-stopped
+    jackett:
+        image: linuxserver/jackett
+        container_name: jackett
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/Chicago
+            - AUTO_UPDATE=true
+        volumes:
+            - /home/luckierdodge/data/jackett/config:/config
+            - /home/luckierdodge/data/jackett/downloads:/downloads
+        network_mode: host
+        restart: unless-stopped
+    qbittorrent:
+        image: linuxserver/qbittorrent
+        container_name: qbittorrent
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/Chicago
+            - UMASK_SET=022
+            - WEBUI_PORT=8080
+        network_mode: host
+        volumes:
+            - /home/luckierdodge/data/qbittorrent/config:/config
+            - /home/luckierdodge/data/media:/media
+        restart: unless-stopped
