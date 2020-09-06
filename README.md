@@ -21,7 +21,7 @@ Notes to me, for when I inevitably have to set all this up again and have forgot
 ## qBittorrent
 
 * The web portal is at port 8080 by default. Default username/password is `admin`/`adminadmin`.
-* Change the default user and password, enable anonymous mode, and DO NOT set the port to random on every start. That's what causes the annoying stalling bug.
+* Change the default user and password.
 * Set default save path to /media/downloads
 
 ## Jackett
