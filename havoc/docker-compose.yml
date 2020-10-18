@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
     plex:
         container_name: plex
@@ -8,14 +8,14 @@ services:
         environment:
           - TZ=America/Chicago
           - PLEX_CLAIM=<https://www.plex.tv/claim>
-          - ADVERTISE_IP=http://192.168.1.51:32400/
+          - ADVERTISE_IP=http://192.168.0.117:32400/
           - PLEX_UID=1000
           - PLEX_GID=1000
-        hostname: installation04
+        hostname: havoc
         volumes:
-          - /home/luckierdodge/data/plex/config:/config
-          - /home/luckierdodge/data/plex/transcode:/transcode
-          - /home/luckierdodge/data/media:/data
+          - /home/luckierdodge/havoc-data/plex/config:/config
+          - /home/luckierdodge/havoc-data/plex/transcode:/transcode
+          - /home/luckierdodge/havoc-data/media:/data
     sonarr:
         image: linuxserver/sonarr
         container_name: sonarr
@@ -25,8 +25,21 @@ services:
             - TZ=America/Chicago
             - UMASK_SET=022
         volumes:
-            - /home/luckierdodge/data/sonarr/config:/config
-            - /home/luckierdodge/data/media:/media
+            - /home/luckierdodge/havoc-data/sonarr/config:/config
+            - /home/luckierdodge/havoc-data/media:/media
+        network_mode: host
+        restart: unless-stopped
+    radarr:
+        image: linuxserver/radarr
+        container_name: radarr
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/Chicago
+            - UMASK_SET=022
+        volumes:
+            - /home/luckierdodge/havoc-data/radarr/config:/config
+            - /home/luckierdodge/havoc-data/media:/media
         network_mode: host
         restart: unless-stopped
     jackett:
@@ -38,8 +51,8 @@ services:
             - TZ=America/Chicago
             - AUTO_UPDATE=true
         volumes:
-            - /home/luckierdodge/data/jackett/config:/config
-            - /home/luckierdodge/data/jackett/downloads:/downloads
+            - /home/luckierdodge/havoc-data/jackett/config:/config
+            - /home/luckierdodge/havoc-data/jackett/downloads:/downloads
         network_mode: host
         restart: unless-stopped
     qbittorrent:
@@ -53,6 +66,6 @@ services:
             - WEBUI_PORT=8080
         network_mode: host
         volumes:
-            - /home/luckierdodge/data/qbittorrent/config:/config
-            - /home/luckierdodge/data/media:/media
+            - /home/luckierdodge/havoc-data/qbittorrent/config:/config
+            - /home/luckierdodge/havoc-data/media:/media
         restart: unless-stopped
