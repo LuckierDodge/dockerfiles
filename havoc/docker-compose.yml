@@ -1,21 +1,5 @@
 version: '2.1'
 services:
-    plex:
-        container_name: plex
-        image: plexinc/pms-docker
-        restart: unless-stopped
-        network_mode: host
-        environment:
-          - TZ=America/Chicago
-          - PLEX_CLAIM=<https://www.plex.tv/claim>
-          - ADVERTISE_IP=http://192.168.0.117:32400/
-          - PLEX_UID=1000
-          - PLEX_GID=1000
-        hostname: havoc
-        volumes:
-          - /home/luckierdodge/havoc-data/plex/config:/config
-          - /home/luckierdodge/havoc-data/plex/transcode:/transcode
-          - /home/luckierdodge/havoc-data/media:/data
     sonarr:
         image: linuxserver/sonarr
         container_name: sonarr
@@ -25,7 +9,7 @@ services:
             - TZ=America/Chicago
             - UMASK_SET=022
         volumes:
-            - /home/luckierdodge/havoc-data/sonarr/config:/config
+            - /home/luckierdodge/havoc-config/sonarr/config:/config
             - /home/luckierdodge/havoc-data/media:/media
         network_mode: host
         restart: unless-stopped
@@ -38,7 +22,7 @@ services:
             - TZ=America/Chicago
             - UMASK_SET=022
         volumes:
-            - /home/luckierdodge/havoc-data/radarr/config:/config
+            - /home/luckierdodge/havoc-config/radarr/config:/config
             - /home/luckierdodge/havoc-data/media:/media
         network_mode: host
         restart: unless-stopped
@@ -51,7 +35,7 @@ services:
             - TZ=America/Chicago
             - AUTO_UPDATE=true
         volumes:
-            - /home/luckierdodge/havoc-data/jackett/config:/config
+            - /home/luckierdodge/havoc-config/jackett/config:/config
             - /home/luckierdodge/havoc-data/jackett/downloads:/downloads
         network_mode: host
         restart: unless-stopped
@@ -66,6 +50,6 @@ services:
             - WEBUI_PORT=8080
         network_mode: host
         volumes:
-            - /home/luckierdodge/havoc-data/qbittorrent/config:/config
+            - /home/luckierdodge/havoc-config/qbittorrent/config:/config
             - /home/luckierdodge/havoc-data/media:/media
         restart: unless-stopped

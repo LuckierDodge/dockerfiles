@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+    plex:
+        container_name: plex
+        image: plexinc/pms-docker
+        restart: unless-stopped
+        network_mode: host
+        environment:
+          - TZ=America/Chicago
+          - PLEX_CLAIM=<https://www.plex.tv/claim>
+          - ADVERTISE_IP=http://192.168.0.117:32400/
+          - PLEX_UID=1000
+          - PLEX_GID=1000
+        hostname: havoc
+        volumes:
+          - /home/luckierdodge/havoc-data/plex/config:/config
+          - /home/luckierdodge/havoc-data/plex/transcode:/transcode
+          - /home/luckierdodge/havoc-data/media:/data
+    autoheal:
+        container_name: autoheal
+        image: willfarrell/autoheal
+        restart: unless-stopped
+        environment:
+            - AUTOHEAL_CONTAINER_LABEL=all
+            - AUTOHEAL_INTERVAL=30
+            - AUTOHEAL_START_PERIOD=60
+            - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
+        volumes: 
+            - /var/run/docker.sock:/var/run/docker.sock
