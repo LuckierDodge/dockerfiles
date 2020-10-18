@@ -8,13 +8,13 @@ services:
         environment:
           - TZ=America/Chicago
           - PLEX_CLAIM=<https://www.plex.tv/claim>
-          - ADVERTISE_IP=http://192.168.0.117:32400/
+          - ADVERTISE_IP=http://192.168.0.178:32400/
           - PLEX_UID=1000
           - PLEX_GID=1000
-        hostname: havoc
+        hostname: ark
         volumes:
-          - /home/luckierdodge/havoc-data/plex/config:/config
-          - /home/luckierdodge/havoc-data/plex/transcode:/transcode
+          - /home/luckierdodge/ark-config/plex/config:/config
+          - /home/luckierdodge/ark-config/plex/transcode:/transcode
           - /home/luckierdodge/havoc-data/media:/data
     autoheal:
         container_name: autoheal
