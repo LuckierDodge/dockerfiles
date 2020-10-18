@@ -21,3 +21,14 @@ services:
         dns:
             - 127.0.0.1
             - 1.1.1.1
+    autoheal:
+        container_name: autoheal
+        image: willfarrell/autoheal
+        restart: unless-stopped
+        environment:
+            - AUTOHEAL_CONTAINER_LABEL=all
+            - AUTOHEAL_INTERVAL=30
+            - AUTOHEAL_START_PERIOD=60
+            - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
+        volumes: 
+            - /var/run/docker.sock:/var/run/docker.sock
