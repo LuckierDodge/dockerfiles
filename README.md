@@ -2,8 +2,6 @@
 
 > One repo to rule the Dockerfiles, one repo to find them, one repo to bring them all, and on the server bind them.
 
-We'll all just ignore the fact that I'm using docker-compose and don't actually have any dockerfiles in here, okay?
-
 # How Do?
 
 Make sure you've installed Docker and Docker Compose, then run `docker-compose up -d`. Boom, done.
@@ -12,13 +10,20 @@ Make sure you've installed Docker and Docker Compose, then run `docker-compose u
 
 Notes to me, for when I inevitably have to set all this up again and have forgotten how.
 
-## Havoc
+## Ark
+
+### Wiki.js
+
+* Create a `secret.env` and set `POSTGRES_PASSWORD` and `DB_PASS`.
+* Port is 3000
 
 ### Plex
 
 * Plex requires that you set a claim code, retrieved from [plex.tv/claim](https://www.plex.tv/claim). It expires after like 4 minutes, so get the claim code and set it in docker-compose.yml just before first start.
 * Needs port 32400 forwarded from router.
 * Create a `~/data/media/movies` and `~/data/media/tv`, and make sure they're owned by your user.
+
+## Havoc
 
 ### qBittorrent
 
