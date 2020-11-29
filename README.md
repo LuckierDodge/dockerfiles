@@ -1,6 +1,6 @@
 # dockerfiles
 
-One repo to rule the Dockerfiles, one repo to find them, one repo to bring them all, and on the server bind them.
+> One repo to rule the Dockerfiles, one repo to find them, one repo to bring them all, and on the server bind them.
 
 We'll all just ignore the fact that I'm using docker-compose and don't actually have any dockerfiles in here, okay?
 
