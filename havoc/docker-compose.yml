@@ -57,6 +57,7 @@ services:
         container_name: autoheal
         image: willfarrell/autoheal
         restart: unless-stopped
+        network_mode: host
         environment:
             - AUTOHEAL_CONTAINER_LABEL=all
             - AUTOHEAL_INTERVAL=30
