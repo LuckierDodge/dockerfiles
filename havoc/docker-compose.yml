@@ -65,3 +65,15 @@ services:
             - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
+    ombi:
+        image: ghcr.io/linuxserver/ombi
+        container_name: ombi
+        network_mode: host
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/Chicago
+        volumes:
+            - /home/luckierdodge/havoc-config/ombi
+        restart: unless-stopped
+
