@@ -16,6 +16,7 @@ services:
           - /home/luckierdodge/ark-config/plex/config:/config
           - /home/luckierdodge/ark-config/plex/transcode:/transcode
           - /home/luckierdodge/havoc-data/media:/data
+          - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Music:/music
     autoheal:
         container_name: autoheal
         image: willfarrell/autoheal
