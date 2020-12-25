@@ -17,6 +17,7 @@ services:
           - /home/luckierdodge/ark-config/plex/transcode:/transcode
           - /home/luckierdodge/havoc-data/media:/data
           - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Music:/music
+          - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Pictures:/Pictures
     autoheal:
         container_name: autoheal
         image: willfarrell/autoheal
@@ -55,3 +56,34 @@ services:
           - "3000:3000"
         volumes:
           - /home/luckierdodge/ark-data/wikijs/data:/data
+    calibre:
+        image: ghcr.io/linuxserver/calibre
+        container_name: calibre
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Chicago
+          - GUAC_USER=luckierdodge
+          - GUAC_PASS=61af3c63e8adc32cb5264b82ecfc867f #echo -n password | openssl md5
+          - UMASK_SET=022
+        volumes:
+          - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Library:/Library
+          - /home/luckierdodge/ark-data/calibre:/config
+        ports:
+          - 8080:8080
+          - 8081:8081
+        restart: unless-stopped
+    calibre-web:
+        image: ghcr.io/linuxserver/calibre-web
+        container_name: calibre-web
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Chicago
+          - DOCKER_MODS=linuxserver/calibre-web:calibre
+        volumes:
+          - /home/luckierdodge/ark-data/calibre-web:/config
+          - /home/luckierdodge/ark-data/calibre:/books
+        ports:
+          - 8083:8083
+        restart: unless-stopped
