@@ -32,3 +32,17 @@ services:
             - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
         volumes: 
             - /var/run/docker.sock:/var/run/docker.sock
+    smokeping:
+        image: ghcr.io/linuxserver/smokeping
+        container_name: smokeping
+        environment: 
+          - PUID=1000
+          - PGID=1000
+          - TZ=US/Chicago
+        volumes:
+          - /home/luckierdodge/smokeping/config:/config
+          - /home/luckierdodge/smokeping/data:/data
+        ports:
+          - 8888:80
+        restart: unless-stopped
+
