@@ -52,7 +52,4 @@ Notes to me, for when I inevitably have to set all this up again and have forgot
 
 # Looking for More?
 
-* [Check out my website](https://ryandlewis.dev)
-* [:zap: Buy Me a Kilowatt :zap:](https://www.buymeacoffee.com/aVc18KuLq)
-* [@RhinoDaDino on Twitter](https://twitter.com/RhinoDaDino)
-* [@luckierdodge on Instagram](https://www.instagram.com/luckierdodge/)
+[🌐 ryandlewis.dev](https://ryandlewis.dev)
