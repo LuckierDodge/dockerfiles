@@ -16,6 +16,7 @@ services:
           - /home/luckierdodge/ark-config/plex/config:/config
           - /home/luckierdodge/ark-config/plex/transcode:/transcode
           - /home/luckierdodge/havoc-data/media:/data
+          - /home/luckierdodge/media-storage:/media-storage
           - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Music:/music
           - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Pictures:/Pictures
     autoheal:

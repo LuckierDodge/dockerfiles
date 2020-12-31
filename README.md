@@ -23,6 +23,10 @@ Notes to me, for when I inevitably have to set all this up again and have forgot
 * Needs port 32400 forwarded from router.
 * Create a `~/data/media/movies` and `~/data/media/tv`, and make sure they're owned by your user.
 
+### Calibre
+
+https://github.com/apprenticeharper/DeDRM_tools/releases/download/7.0.0b4/DeDRM_plugin_7.0.0b4.zip
+
 ## Havoc
 
 ### qBittorrent
