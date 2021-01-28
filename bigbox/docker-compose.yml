@@ -1,14 +1,13 @@
 version: '2.3'
 services:
-    storj:
-        container_name: storagenode
-        image: storjlabs/storagenode:latest
-        ports:
-            - 28697:28967
-            - 14002:14002
-        env_file:
-            storj.env
-		volumes:
-			- /home/luckierdodge/.local/share/storj/identity/storagenode:/app/identity
-			- /home/luckierdodge/storj:/app/config
-		restart: unless-stopped
+  storj:
+    container_name: storagenode
+    image: storjlabs/storagenode:latest
+    ports:
+      - 28697:28967
+      - 14002:14002
+    env_file: storj.env
+    volumes:
+      - /home/luckierdodge/.local/share/storj/identity/storagenode:/app/identity
+      - /home/luckierdodge/storj:/app/config
+    restart: unless-stopped
