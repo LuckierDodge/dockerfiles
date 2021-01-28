@@ -4,7 +4,7 @@ services:
     container_name: storagenode
     image: storjlabs/storagenode:latest
     ports:
-      - 28697:28967
+      - 28967:28967
       - 14002:14002
     env_file: storj.env
     volumes:
