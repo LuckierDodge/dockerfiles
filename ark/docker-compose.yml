@@ -51,6 +51,7 @@ services:
           - DB_PORT=5432
           - DB_USER=wikijs
           - DB_NAME=wiki
+          - SSL_ACTIVE=false
         env_file: secret.env
         restart: unless-stopped
         ports:
