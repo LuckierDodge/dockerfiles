@@ -12,7 +12,6 @@ services:
             - 192.168.0.154:53:53/tcp
             - 192.168.0.154:53:53/udp
             - 192.168.0.154:8080:80
-            - 192.168.0.154:8443:443
         environment:
             - TZ=America/Chicago
         volumes:
@@ -45,4 +44,22 @@ services:
         ports:
           - 8888:80
         restart: unless-stopped
-
+    swag:
+        image: linuxserver/swag
+        container_name: swag
+        cap_add:
+          - NET_ADMIN
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=US/Chicago
+          - URL=ryandlewis.dev
+          - SUBDOMAINS=ark,wiki,storj,riskrunner
+          - ONLY_SUBDOMAINS=true
+          - VALIDATION=http
+        volumes:
+          - /home/luckierdodge/riskrunner-config/swag:/config
+        ports:
+          - 443:443
+          - 80:80
+        restart: unless-stopped
