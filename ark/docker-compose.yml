@@ -89,3 +89,16 @@ services:
         ports:
           - 8083:8083
         restart: unless-stopped
+    heimdall:
+        image: ghcr.io/linuxserver/heimdall
+        container_name: heimdall
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Chicago
+        volumes:
+          - /home/luckierdodge/ark-data/heimdall:/config
+        ports:
+          - 11180:80
+          - 11443:443
+        restart: unless-stopped
