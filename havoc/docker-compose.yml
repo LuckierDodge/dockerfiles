@@ -74,6 +74,6 @@ services:
             - PGID=1000
             - TZ=America/Chicago
         volumes:
-            - /home/luckierdodge/havoc-config/ombi
+            - /home/luckierdodge/havoc-config/ombi:/config
         restart: unless-stopped
 
