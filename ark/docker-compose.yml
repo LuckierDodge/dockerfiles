@@ -71,6 +71,7 @@ services:
         volumes:
           - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Library:/Library
           - /home/luckierdodge/ark-data/calibre:/config
+          - /home/luckierdodge/media-storage/books:/books
         ports:
           - 8080:8080
           - 8081:8081
