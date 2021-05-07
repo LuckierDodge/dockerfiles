@@ -15,8 +15,8 @@ services:
         environment:
             - TZ=America/Chicago
         volumes:
-            - /home/luckierdodge/etc-pihole/:/etc/pihole
-            - /home/luckierdodge/etc-dnsmasq.d/etc/dnsmasq.d
+            - /home/luckierdodge/riskrunner-config/etc-pihole/:/etc/pihole
+            - /home/luckierdodge/riskrunner-config/etc-dnsmasq.d/etc/dnsmasq.d
         dns:
             - 127.0.0.1
             - 1.1.1.1
@@ -39,8 +39,8 @@ services:
           - PGID=1000
           - TZ=US/Chicago
         volumes:
-          - /home/luckierdodge/smokeping/config:/config
-          - /home/luckierdodge/smokeping/data:/data
+          - /home/luckierdodge/riskrunner-config/smokeping/config:/config
+          - /home/luckierdodge/riskrunner-data/smokeping/data:/data
         ports:
           - 8888:80
         restart: unless-stopped
