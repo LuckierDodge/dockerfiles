@@ -1,19 +1,42 @@
 version: '2'
 services:
+    wireguard:
+        image: ghcr.io/linuxserver/wireguard
+        container_name: wireguard
+        cap_add:
+          - NET_ADMIN
+          - SYS_MODULE
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=US/New York
+          - SERVERURL=riskrunner.ryandlewis.dev
+          - SERVERPORT=51820
+          - PEERS=ryan-pixel4a,ryan-surfaceduo,ryan-normandy
+          - PEERDNS=auto
+          - INTERNAL_SUBNET=10.13.13.0
+          - ALLOWEDIPS=0.0.0.0/0
+        volumes:
+          - /home/luckierdodge/riskrunner-config/wireguard/config:/config
+          - /lib/modules:/lib/modules
+        ports:
+          - 51820:51820/udp
+        sysctls:
+          - net.ipv4.conf.all.src_valid_mark=1
+        restart: unless-stopped
+        dns:
+            - "192.168.0.154"
+            - "1.1.1.1"
     pihole:
         container_name: pihole
         image: pihole/pihole:latest
         restart: unless-stopped
         ports:
-            - 10.6.0.1:53:53/tcp
-            - 10.6.0.1:53:53/udp
-            - 10.6.0.1:8080:80
-            - 10.6.0.1:8443:443
             - 192.168.0.154:53:53/tcp
             - 192.168.0.154:53:53/udp
             - 192.168.0.154:8080:80
         environment:
-            - TZ=America/Chicago
+            - TZ=US/New York
         volumes:
             - /home/luckierdodge/riskrunner-config/etc-pihole/:/etc/pihole
             - /home/luckierdodge/riskrunner-config/etc-dnsmasq.d/etc/dnsmasq.d
@@ -37,7 +60,7 @@ services:
         environment: 
           - PUID=1000
           - PGID=1000
-          - TZ=US/Chicago
+          - TZ=US/New York
         volumes:
           - /home/luckierdodge/riskrunner-config/smokeping/config:/config
           - /home/luckierdodge/riskrunner-data/smokeping/data:/data
@@ -52,7 +75,7 @@ services:
         environment:
           - PUID=1000
           - PGID=1000
-          - TZ=US/Chicago
+          - TZ=US/New York
           - URL=ryandlewis.dev
           - SUBDOMAINS=ark,wiki,storj,riskrunner,heimdall,warden
           - ONLY_SUBDOMAINS=true
