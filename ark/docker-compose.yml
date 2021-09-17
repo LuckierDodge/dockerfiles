@@ -65,8 +65,7 @@ services:
           - PUID=1000
           - PGID=1000
           - TZ=America/Chicago
-          - GUAC_USER=luckierdodge
-          - GUAC_PASS=61af3c63e8adc32cb5264b82ecfc867f #echo -n password | openssl md5
+          - PASSWORD=Simple123
           - UMASK_SET=022
         volumes:
           - /var/snap/nextcloud/common/nextcloud/data/luckierdodge/files/Library:/Library
@@ -125,3 +124,28 @@ services:
         ports:
           - 28080:80
           - 23012:3012
+    grocy:
+        image: ghcr.io/linuxserver/grocy
+        container_name: grocy
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Chicago
+        volumes:
+          - /home/luckierdodge/ark-config/grocy:/config
+        ports:
+          - 9283:80
+        restart: unless-stopped
+    homeassistant:
+        image: ghcr.io/linuxserver/homeassistant
+        container_name: homeassistant
+        network_mode: host
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=US/New York
+        volumes:
+            - /home/luckierdodge/ark-config/homeassistant:/config
+        ports:
+            - 8123:8123
+        restart: unless-stopped
