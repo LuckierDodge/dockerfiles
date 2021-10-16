@@ -77,7 +77,7 @@ services:
           - PGID=1000
           - TZ=US/New York
           - URL=ryandlewis.dev
-          - SUBDOMAINS=ark,wiki,storj,riskrunner,heimdall,warden
+          - SUBDOMAINS=ark,wiki,storj,riskrunner,heimdall,warden,request
           - ONLY_SUBDOMAINS=true
           - VALIDATION=http
         volumes:
