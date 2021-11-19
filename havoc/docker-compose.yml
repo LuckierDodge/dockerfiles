@@ -52,7 +52,7 @@ services:
         volumes:
             - /home/luckierdodge/havoc-config/qbittorrent/config:/config
             - /home/luckierdodge/havoc-data/media:/media
-        restart: unless-stopped
+        restart: "no"
     autoheal:
         container_name: autoheal
         image: willfarrell/autoheal
