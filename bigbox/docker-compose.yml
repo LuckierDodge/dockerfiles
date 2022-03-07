@@ -4,7 +4,8 @@ services:
     container_name: storagenode
     image: storjlabs/storagenode:latest
     ports:
-      - 28967:28967
+      - 28967:28967/tcp
+      - 28967:28967/udp
       - 14002:14002
     env_file: storj.env
     volumes:
@@ -30,3 +31,44 @@ services:
       dns:
           - 127.0.0.1
           - 1.1.1.1
+  scrutiny:
+    image: lscr.io/linuxserver/scrutiny
+    container_name: scrutiny
+    cap_add:
+      - SYS_RAWIO
+      - SYS_ADMIN #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New York
+      - SCRUTINY_API_ENDPOINT=http://localhost:8080
+      - SCRUTINY_WEB=true
+      - SCRUTINY_COLLECTOR=true
+    volumes:
+      - /home/luckierdodge/bigbox-config/scrutiny/config:/config
+      - /run/udev:/run/udev:ro
+    ports:
+      - 8888:8080
+    devices:
+      - /dev/sda:/dev/sda
+      - /dev/sdb:/dev/sdb
+      - /dev/sdc:/dev/sdc
+      - /dev/sdd:/dev/sdd
+      - /dev/sde:/dev/sde
+      - /dev/sdf:/dev/sdf
+      - /dev/sdg:/dev/sdg
+      - /dev/sdh:/dev/sdh
+      - /dev/sdi:/dev/sdi
+      - /dev/sdj:/dev/sdj
+    restart: unless-stopped
+  autoheal:
+    container_name: autoheal
+    image: willfarrell/autoheal
+    restart: unless-stopped
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+      - AUTOHEAL_INTERVAL=30
+      - AUTOHEAL_START_PERIOD=60
+      - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
