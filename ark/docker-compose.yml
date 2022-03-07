@@ -6,7 +6,7 @@ services:
         restart: unless-stopped
         network_mode: host
         environment:
-          - TZ=America/Chicago
+          - TZ=America/Detroit
           - PLEX_CLAIM=<https://www.plex.tv/claim>
           - ADVERTISE_IP=http://192.168.0.178:32400/
           - PLEX_UID=1000
@@ -64,7 +64,7 @@ services:
         environment:
           - PUID=1000
           - PGID=1000
-          - TZ=America/Chicago
+          - TZ=America/Detroit
           - PASSWORD=Simple123
           - UMASK_SET=022
         volumes:
@@ -81,7 +81,7 @@ services:
         environment:
           - PUID=1000
           - PGID=1000
-          - TZ=America/Chicago
+          - TZ=America/Detroit
           - DOCKER_MODS=linuxserver/calibre-web:calibre
         volumes:
           - /home/luckierdodge/ark-data/calibre-web:/config
@@ -95,7 +95,7 @@ services:
         environment:
           - PUID=1000
           - PGID=1000
-          - TZ=America/Chicago
+          - TZ=America/Detroit
         volumes:
           - /home/luckierdodge/ark-data/heimdall:/config
         ports:
@@ -108,7 +108,7 @@ services:
         environment:
           - PUID=1000
           - PGID=1000
-          - TZ=America/Chicago
+          - TZ=America/Detroit
         volumes:
           - /home/luckierdodge/ark-config/nextcloud:/config
           - /home/luckierdodge/ark-data/nextcloud:/data
@@ -130,7 +130,7 @@ services:
         environment:
           - PUID=1000
           - PGID=1000
-          - TZ=America/Chicago
+          - TZ=America/Detroit
         volumes:
           - /home/luckierdodge/ark-config/grocy:/config
         ports:
