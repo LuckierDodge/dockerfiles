@@ -11,3 +11,22 @@ services:
       - /home/luckierdodge/.local/share/storj/identity/storagenode:/app/identity
       - /home/luckierdodge/storj:/app/config
     restart: unless-stopped
+  pihole:
+      container_name: pihole
+      image: pihole/pihole:latest
+      restart: unless-stopped
+      ports:
+          - 53:53/tcp
+          - 53:53/udp
+          - 67:67/udp
+          - 8080:80/tcp
+      environment:
+          - TZ=US/New York
+      volumes:
+          - /home/luckierdodge/bigbox-config/etc-pihole/:/etc/pihole
+          - /home/luckierdodge/bigbox-config/etc-dnsmasq.d/etc/dnsmasq.d
+      cap_add:
+        - NET_ADMIN
+      dns:
+          - 127.0.0.1
+          - 1.1.1.1
