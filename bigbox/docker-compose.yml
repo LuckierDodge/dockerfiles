@@ -1,17 +1,5 @@
 version: '2.3'
 services:
-  storj:
-    container_name: storagenode
-    image: storjlabs/storagenode:latest
-    ports:
-      - 28967:28967/tcp
-      - 28967:28967/udp
-      - 14002:14002
-    env_file: storj.env
-    volumes:
-      - /home/luckierdodge/.local/share/storj/identity/storagenode:/app/identity
-      - /home/luckierdodge/storj:/app/config
-    restart: unless-stopped
   pihole:
       container_name: pihole
       image: pihole/pihole:latest
