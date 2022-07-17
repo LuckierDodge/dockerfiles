@@ -138,6 +138,18 @@ services:
         ports:
           - 9283:80
         restart: unless-stopped
+    freshrss:
+        image: lscr.io/linuxserver/freshrss:latest
+        container_name: freshrss
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Detroit
+        volumes:
+            - /home/luckierdodge/ark-config/freshrss:/freshrss
+        ports:
+          - 9280:80
+        restart: unless-stopped
         #    homeassistant:
         #        image: ghcr.io/linuxserver/homeassistant
         #        container_name: homeassistant
@@ -151,3 +163,4 @@ services:
         #        ports:
         #            - 8123:8123
         #        restart: unless-stopped
+
