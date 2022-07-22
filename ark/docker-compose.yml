@@ -146,7 +146,7 @@ services:
           - PGID=1000
           - TZ=America/Detroit
         volumes:
-            - /home/luckierdodge/ark-config/freshrss:/freshrss
+            - /home/luckierdodge/ark-config/freshrss:/config
         ports:
           - 9280:80
         restart: unless-stopped
