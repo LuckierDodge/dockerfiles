@@ -183,3 +183,41 @@ services:
           - 22000:22000/udp
           - 21027:21027/udp
       restart: unless-stopped
+    onlyoffice:
+      image: onlyoffice/documentserver
+      container_name: onlyoffice
+      restart: unless-stopped
+      environment:
+          - JWT_ENABLED=true
+          - JWT_SECRET=bigsecret
+          - JWT_HEADER=AuthorizationJwt
+          - JWT_IN_BODY=true
+      volumes:
+          - /home/luckierdodge/ark-config/onlyoffice/logs:/var/log/onlyoffice
+          - /home/luckierdodge/ark-data/onlyoffice/certs:/var/www/onlyoffice/Data
+          - /home/luckierdodge/ark-data/onlyoffice/onlyoffice:/var/lib/onlyoffice
+          - /home/luckierdodge/ark-data/onlyoffice/postgresql:/var/lib/postgresql
+      ports:
+          - 8282:80
+    budge:
+        image: lscr.io/linuxserver/budge:latest
+        container_name: budge
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Detroit
+        volumes:
+          - /home/luckierdodge/ark-config/budge:/config
+        ports:
+          - 8980:80
+          - 8943:443
+        restart: unless-stopped
+    foundryvtt:
+        image: felddy/foundryvtt:release
+        container_name: foundryvtt
+        volumes:
+          - /home/luckierdodge/ark-data/foundryvtt:/data
+        ports:
+          - 30000:30000
+        restart: unless-stopped
+        env_file: foundryvtt.env

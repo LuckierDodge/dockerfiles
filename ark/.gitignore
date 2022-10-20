@@ -1,3 +1,4 @@
 secret.env
 vaultwarden.env
+foundryvtt.env
 *.zip
