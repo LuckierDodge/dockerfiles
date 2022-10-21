@@ -1,0 +1,5 @@
+secret.env
+vaultwarden.env
+foundryvtt.env
+onlyoffice.env
+*.zip
