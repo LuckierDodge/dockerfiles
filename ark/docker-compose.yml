@@ -30,34 +30,6 @@ services:
           - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
         volumes: 
           - /var/run/docker.sock:/var/run/docker.sock
-    db:
-        image: postgres:11-alpine
-        environment:
-          - POSTGRES_DB=wiki
-          - POSTGRES_USER=wikijs
-        env_file: secret.env
-        logging:
-            driver: "none"
-        restart: unless-stopped
-        volumes:
-          - /home/luckierdodge/ark-data/postgres/data:/var/lib/postgresql/data
-    wiki:
-        image: requarks/wiki:2
-        depends_on:
-          - db
-        environment:
-          - DB_TYPE=postgres
-          - DB_HOST=db
-          - DB_PORT=5432
-          - DB_USER=wikijs
-          - DB_NAME=wiki
-          - SSL_ACTIVE=false
-        env_file: secret.env
-        restart: unless-stopped
-        ports:
-          - "3000:3000"
-        volumes:
-          - /home/luckierdodge/ark-data/wikijs/data:/data
     calibre:
         image: ghcr.io/linuxserver/calibre
         container_name: calibre
@@ -138,6 +110,18 @@ services:
         ports:
           - 9283:80
         restart: unless-stopped
+    freshrss:
+        image: lscr.io/linuxserver/freshrss:latest
+        container_name: freshrss
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Detroit
+        volumes:
+            - /home/luckierdodge/ark-config/freshrss:/config
+        ports:
+          - 9280:80
+        restart: unless-stopped
         #    homeassistant:
         #        image: ghcr.io/linuxserver/homeassistant
         #        container_name: homeassistant
@@ -151,3 +135,89 @@ services:
         #        ports:
         #            - 8123:8123
         #        restart: unless-stopped
+    bookstack:
+       image: lscr.io/linuxserver/bookstack
+       container_name: bookstack
+       environment:
+          - PUID=1000
+          - PGID=1000
+          - APP_URL=https://wiki.ryandlewis.dev
+          - DB_HOST=bookstack_db
+          - DB_USER=bookstack
+          - DB_DATABASE=bookstackapp
+       env_file: secret.env
+       volumes:
+          - /home/luckierdodge/ark-config/bookstack:/config
+       ports:
+          - 6875:80
+       restart: unless-stopped
+       depends_on:
+          - bookstack_db
+    bookstack_db:
+       image: lscr.io/linuxserver/mariadb
+       container_name: bookstack_db
+       environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Detroit
+          - MYSQL_DATABASE=bookstackapp
+          - MYSQL_USER=bookstack
+       env_file: secret.env
+       volumes:
+          - /home/luckierdodge/ark-config/bookstack_db:/config
+       restart: unless-stopped
+    syncthing:
+      image: lscr.io/linuxserver/syncthing:latest
+      container_name: syncthing
+      hostname: arksync #optional
+      environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Detroit
+      volumes:
+          - /home/luckierdodge/ark-config/syncthing:/config
+          - /home/luckierdodge/ark-data/syncthing/data:/data
+      ports:
+          - 8384:8384
+          - 22000:22000/tcp
+          - 22000:22000/udp
+          - 21027:21027/udp
+      restart: unless-stopped
+    onlyoffice:
+      image: onlyoffice/documentserver
+      container_name: onlyoffice
+      restart: unless-stopped
+      environment:
+          - JWT_ENABLED=true
+          - JWT_SECRET=bigsecret
+          - JWT_HEADER=AuthorizationJwt
+          - JWT_IN_BODY=true
+      volumes:
+          - /home/luckierdodge/ark-config/onlyoffice/logs:/var/log/onlyoffice
+          - /home/luckierdodge/ark-data/onlyoffice/certs:/var/www/onlyoffice/Data
+          - /home/luckierdodge/ark-data/onlyoffice/onlyoffice:/var/lib/onlyoffice
+          - /home/luckierdodge/ark-data/onlyoffice/postgresql:/var/lib/postgresql
+      ports:
+          - 8282:80
+    budge:
+        image: lscr.io/linuxserver/budge:latest
+        container_name: budge
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=America/Detroit
+        volumes:
+          - /home/luckierdodge/ark-config/budge:/config
+        ports:
+          - 8980:80
+          - 8943:443
+        restart: unless-stopped
+    foundryvtt:
+        image: felddy/foundryvtt:release
+        container_name: foundryvtt
+        volumes:
+          - /home/luckierdodge/ark-data/foundryvtt:/data
+        ports:
+          - 30000:30000
+        restart: unless-stopped
+        env_file: foundryvtt.env
