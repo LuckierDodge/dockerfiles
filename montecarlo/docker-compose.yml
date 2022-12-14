@@ -67,7 +67,7 @@ services:
             - /home/luckierdodge/havoc-data/media:/media #optional
         ports:
             - 6789:6789
-        restart: "no"
+        restart: unless-stopped
     autoheal:
         container_name: autoheal
         image: willfarrell/autoheal
@@ -180,6 +180,7 @@ services:
         ports:
           - 28080:80
           - 23012:3012
+        restart: unless-stopped
     grocy:
         image: ghcr.io/linuxserver/grocy
         container_name: grocy
@@ -286,3 +287,12 @@ services:
           - 30000:30000
         restart: unless-stopped
         env_file: foundryvtt.env
+    core-keeper:
+      image: escaping/core-keeper-dedicated
+      volumes:
+        - /home/luckierdodge/montecarlo-storage/game-servers/core-keeper/server-files:/home/steam/core-keeper-dedicated
+        - /home/luckierdodge/montecarlo-storage/game-servers/core-keeper/server-data:/home/steam/core-keeper-data
+      env_file:
+        - ./core.env
+      restart: unless-stopped
+      stop_grace_period: 2m
