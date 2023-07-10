@@ -279,7 +279,7 @@ services:
           - 8943:443
         restart: unless-stopped
     foundryvtt:
-        image: felddy/foundryvtt:release
+        image: felddy/foundryvtt:10
         container_name: foundryvtt
         volumes:
           - /home/luckierdodge/montecarlo-storage/data/foundryvtt:/data
