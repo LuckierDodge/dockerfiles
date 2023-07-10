@@ -8,7 +8,7 @@ services:
           - SYS_MODULE
         environment:
           - PUID=1000
-          - PGID=1000
+          - PGID=100
           - TZ=US/New York
           - SERVERURL=riskrunner.ryandlewis.dev
           - SERVERPORT=51820
@@ -17,7 +17,7 @@ services:
           - INTERNAL_SUBNET=10.13.13.0
           - ALLOWEDIPS=0.0.0.0/0
         volumes:
-          - /home/luckierdodge/riskrunner-config/wireguard/config:/config
+          - /home/luckierdodge/daishi-storage/config/wireguard/config:/config
           - /lib/modules:/lib/modules
         ports:
           - 51820:51820/udp
@@ -38,8 +38,8 @@ services:
         environment:
             - TZ=US/New York
         volumes:
-            - /home/luckierdodge/riskrunner-config/etc-pihole/:/etc/pihole
-            - /home/luckierdodge/riskrunner-config/etc-dnsmasq.d/etc/dnsmasq.d
+            - /home/luckierdodge/daishi-storage/config/etc-pihole/:/etc/pihole
+            - /home/luckierdodge/daishi-storage/config/etc-dnsmasq.d/etc/dnsmasq.d
         dns:
             - 127.0.0.1
             - 1.1.1.1
@@ -59,11 +59,11 @@ services:
         container_name: smokeping
         environment: 
           - PUID=1000
-          - PGID=1000
+          - PGID=100
           - TZ=US/New York
         volumes:
-          - /home/luckierdodge/riskrunner-config/smokeping/config:/config
-          - /home/luckierdodge/riskrunner-data/smokeping/data:/data
+          - /home/luckierdodge/daishi-storage/config/smokeping/config:/config
+          - /home/luckierdodge/daishi-storage/data/smokeping/data:/data
         ports:
           - 8888:80
         restart: unless-stopped
@@ -74,32 +74,32 @@ services:
           - NET_ADMIN
         environment:
           - PUID=1000
-          - PGID=1000
+          - PGID=100
           - TZ=US/New York
           - URL=ryandlewis.dev
-          - SUBDOMAINS=ark,wiki,storj,riskrunner,heimdall,warden,request
+          - SUBDOMAINS=riskrunner,heimdall,warden,request,cloud,wiki,office,foundry
           - ONLY_SUBDOMAINS=true
           - VALIDATION=http
         volumes:
-          - /home/luckierdodge/riskrunner-config/swag:/config
+          - /home/luckierdodge/daishi-storage/config/swag:/config
         ports:
           - 443:443
           - 80:80
         restart: unless-stopped
-    prometheus:
-        image: prom/prometheus
-        container_name: prometheus
-        ports:
-          - 9090:9090
-        volumes:
-          - /home/luckierdodge/riskrunner-config/prometheus:/etc/prometheus
-        restart: unless-stopped
-    grafana:
-        image: grafana/grafana
-        container_name: grafana
-        ports:
-          - 3000:3000
-        volumes:
-          - /home/luckierdodge/riskrunner-config/grafana:/var/lib/grafana
-        restart: unless-stopped
-        user: "1000:1000"
+        #    prometheus:
+        #        image: prom/prometheus
+        #        container_name: prometheus
+        #        ports:
+        #          - 9090:9090
+        #        volumes:
+        #          - /home/luckierdodge/riskrunner-config/prometheus:/etc/prometheus
+        #        restart: unless-stopped
+        #    grafana:
+        #        image: grafana/grafana
+        #        container_name: grafana
+        #        ports:
+        #          - 3000:3000
+        #        volumes:
+        #          - /home/luckierdodge/riskrunner-config/grafana:/var/lib/grafana
+        #        restart: unless-stopped
+        #        user: "1000:1000"

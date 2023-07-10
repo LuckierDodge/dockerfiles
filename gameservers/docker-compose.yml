@@ -1,0 +1,11 @@
+version: '2.1'
+services:
+    core-keeper:
+      image: luckierdodge/core-keeper-dedicated
+      volumes:
+        - /home/luckierdodge/montecarlo-storage/game-servers/core-keeper/server-files:/home/steam/core-keeper-dedicated
+        - /home/luckierdodge/montecarlo-storage/game-servers/core-keeper/server-data:/home/steam/core-keeper-data
+      env_file:
+        - ./core.env
+      restart: unless-stopped
+      stop_grace_period: 1m
