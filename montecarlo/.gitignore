@@ -2,4 +2,5 @@ secret.env
 vaultwarden.env
 foundryvtt.env
 onlyoffice.env
+nextcloud_posgres.env
 *.zip
