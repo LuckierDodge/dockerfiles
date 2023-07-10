@@ -1,0 +1,62 @@
+version: '2'
+services:
+    autoheal:
+        container_name: autoheal
+        image: willfarrell/autoheal
+        restart: unless-stopped
+        environment:
+            - AUTOHEAL_CONTAINER_LABEL=all
+            - AUTOHEAL_INTERVAL=30
+            - AUTOHEAL_START_PERIOD=60
+            - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
+        volumes: 
+            - /var/run/docker.sock:/var/run/docker.sock
+              #    smokeping:
+              #        image: ghcr.io/linuxserver/smokeping
+              #        container_name: smokeping
+              #        environment: 
+              #          - PUID=1000
+              #          - PGID=100
+              #          - TZ=US/New York
+              #        volumes:
+              #          - /home/luckierdodge/daishi-storage/config/smokeping/config:/config
+              #          - /home/luckierdodge/daishi-storage/data/smokeping/data:/data
+              #        ports:
+              #          - 8888:80
+              #        restart: unless-stopped
+    swag:
+        image: linuxserver/swag
+        container_name: swag
+        cap_add:
+          - NET_ADMIN
+        environment:
+          - PUID=1000
+          - PGID=100
+          - TZ=US/New York
+          - URL=ryandlewis.dev
+          - SUBDOMAINS=riskrunner,heimdall,warden,request,cloud,wiki,office,foundry
+          - ONLY_SUBDOMAINS=true
+          - VALIDATION=http
+        volumes:
+          - /home/luckierdodge/cerberus-storage/config/swag:/config
+        ports:
+          - 443:443
+          - 80:80
+        restart: unless-stopped
+        #    prometheus:
+        #        image: prom/prometheus
+        #        container_name: prometheus
+        #        ports:
+        #          - 9090:9090
+        #        volumes:
+        #          - /home/luckierdodge/riskrunner-config/prometheus:/etc/prometheus
+        #        restart: unless-stopped
+        #    grafana:
+        #        image: grafana/grafana
+        #        container_name: grafana
+        #        ports:
+        #          - 3000:3000
+        #        volumes:
+        #          - /home/luckierdodge/riskrunner-config/grafana:/var/lib/grafana
+        #        restart: unless-stopped
+        #        user: "1000:1000"
