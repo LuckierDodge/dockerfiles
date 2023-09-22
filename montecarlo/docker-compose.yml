@@ -131,6 +131,8 @@ services:
       - 11180:80
       - 11443:443
     restart: unless-stopped
+    links:
+      - "paperless_webserver:paperless.local"
   nextcloud:
     image: ghcr.io/linuxserver/nextcloud
     container_name: nextcloud
@@ -268,7 +270,7 @@ services:
     restart: unless-stopped
   nc_postgres:
     container_name: nc_postgres
-    image: postgres
+    image: postgres:15
     restart: unless-stopped
     env_file: nextcloud_postgres.env
     ports:
@@ -276,17 +278,20 @@ services:
     volumes:
       - /home/luckierdodge/montecarlo-storage/data/nc_postgres:/var/lib/postgresql/data
   paperless_broker:
+    container_name: paperless_broker
     image: docker.io/library/redis:7
     restart: unless-stopped
     volumes:
       - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_brokerdata:/data
   paperless_db:
+    container_name: paperless_db
     image: docker.io/library/postgres:15
     restart: unless-stopped
     volumes:
       - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_pgdata:/var/lib/postgresql/data
     env_file: paperless_db.env
   paperless_webserver:
+    container_name: paperless_webserver
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     restart: unless-stopped
     depends_on:
@@ -314,6 +319,7 @@ services:
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
   gotenberg:
+    container_name: gotenberg
     image: docker.io/gotenberg/gotenberg:7.8
     restart: unless-stopped
     # The gotenberg chromium route is used to convert .eml files. We do not
@@ -323,5 +329,6 @@ services:
       - "--chromium-disable-javascript=true"
       - "--chromium-allow-list=file:///tmp/.*"
   tika:
+    container_name: tika
     image: ghcr.io/paperless-ngx/tika:latest
     restart: unless-stopped
