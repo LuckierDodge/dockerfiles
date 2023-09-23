@@ -332,3 +332,19 @@ services:
     container_name: tika
     image: ghcr.io/paperless-ngx/tika:latest
     restart: unless-stopped
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 8880:80
+    environment:
+      - TZ=US/New York
+    volumes:
+      - /home/luckierdodge/montecarlo-storage/config/etc-pihole/:/etc/pihole
+      - /home/luckierdodge/montecarlo-storage/config/etc-dnsmasq.d/etc/dnsmasq.d
+    dns:
+        - 127.0.0.1
+        - 1.1.1.1
