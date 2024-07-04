@@ -9,7 +9,7 @@ services:
       - TZ=America/Detroit
       - UMASK_SET=022
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/sonarr/config:/config
+      - /home/luckierdodge/killingtime-storage/config/sonarr/config:/config
       - /home/luckierdodge/havoc-data/media:/media
     ports:
       - 8989:8989
@@ -23,7 +23,7 @@ services:
       - TZ=America/Detroit
       - UMASK_SET=022
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/radarr/config:/config
+      - /home/luckierdodge/killingtime-storage/config/radarr/config:/config
       - /home/luckierdodge/havoc-data/media:/media
     ports:
       - 7878:7878
@@ -36,7 +36,7 @@ services:
       - PGID=100
       - TZ=America/Detroit
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/nzbget/config:/config
+      - /home/luckierdodge/killingtime-storage/config/nzbget/config:/config
       - /home/luckierdodge/havoc-data/media:/media #optional
     ports:
       - 6789:6789
@@ -63,7 +63,7 @@ services:
       - PGID=100
       - TZ=America/Detroit
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/ombi:/config
+      - /home/luckierdodge/killingtime-storage/config/ombi:/config
     restart: unless-stopped
   plex:
     container_name: plex
@@ -74,17 +74,17 @@ services:
     environment:
       - TZ=America/Detroit
       - PLEX_CLAIM=<https://www.plex.tv/claim>
-      - ADVERTISE_IP=http://192.168.0.240:32400/
+      - ADVERTISE_IP=https://plex.ryandlewis.dev/
       - PLEX_UID=1000
       - PLEX_GID=100
-    hostname: montecarlo
+    hostname: killingtime
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/plex/config:/config
-      - /home/luckierdodge/montecarlo-storage/config/plex/transcode:/transcode
+      - /home/luckierdodge/killingtime-storage/config/plex/config:/config
+      - /home/luckierdodge/killingtime-storage/config/plex/transcode:/transcode
       - /home/luckierdodge/havoc-data/media:/data
       - /home/luckierdodge/media-storage:/media-storage
-      - /home/luckierdodge/montecarlo-storage/data/nextcloud/luckierdodge/files/Music:/music
-      - /home/luckierdodge/montecarlo-storage/data/nextcloud/luckierdodge/files/Pictures:/Pictures
+      - /home/luckierdodge/killingtime-storage/data/nextcloud/luckierdodge/files/Music:/music
+      - /home/luckierdodge/killingtime-storage/data/nextcloud/luckierdodge/files/Pictures:/Pictures
   calibre:
     image: ghcr.io/linuxserver/calibre
     container_name: calibre
@@ -95,8 +95,8 @@ services:
       - PASSWORD=Simple123
       - UMASK_SET=022
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/nextcloud/luckierdodge/files/Library:/Library
-      - /home/luckierdodge/montecarlo-storage/data/calibre:/config
+      - /home/luckierdodge/killingtime-storage/data/nextcloud/luckierdodge/files/Library:/Library
+      - /home/luckierdodge/killingtime-storage/data/calibre:/config
       - /home/luckierdodge/media-storage/books:/books
     ports:
       - 8080:8080
@@ -113,8 +113,8 @@ services:
       - TZ=America/Detroit
       - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/calibre-web:/config
-      - /home/luckierdodge/montecarlo-storage/data/calibre:/books
+      - /home/luckierdodge/killingtime-storage/data/calibre-web:/config
+      - /home/luckierdodge/killingtime-storage/data/calibre:/books
     ports:
       - 8083:8083
     restart: unless-stopped
@@ -126,7 +126,7 @@ services:
       - PGID=100
       - TZ=America/Detroit
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/heimdall:/config
+      - /home/luckierdodge/killingtime-storage/data/heimdall:/config
     ports:
       - 11180:80
       - 11443:443
@@ -141,8 +141,8 @@ services:
       - PGID=100
       - TZ=America/Detroit
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/nextcloud:/config
-      - /home/luckierdodge/montecarlo-storage/data/nextcloud:/data
+      - /home/luckierdodge/killingtime-storage/config/nextcloud:/config
+      - /home/luckierdodge/killingtime-storage/data/nextcloud:/data
     ports:
       - 21443:443
     restart: unless-stopped
@@ -151,66 +151,66 @@ services:
     container_name: vaultwarden
     env_file: vaultwarden.env
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/vaultwarden:/data
+      - /home/luckierdodge/killingtime-storage/data/vaultwarden:/data
     ports:
       - 28080:80
       - 23012:3012
     restart: unless-stopped
-  grocy:
-    image: ghcr.io/linuxserver/grocy
-    container_name: grocy
-    environment:
-      - PUID=1000
-      - PGID=100
-      - TZ=America/Detroit
-    volumes:
-      - /home/luckierdodge/montecarlo-storage/config/grocy:/config
-    ports:
-      - 9283:80
-    restart: unless-stopped
-  freshrss:
-    image: lscr.io/linuxserver/freshrss:latest
-    container_name: freshrss
-    environment:
-      - PUID=1000
-      - PGID=100
-      - TZ=America/Detroit
-    volumes:
-      - /home/luckierdodge/montecarlo-storage/config/freshrss:/config
-    ports:
-      - 9280:80
-    restart: unless-stopped
-  bookstack:
-    image: lscr.io/linuxserver/bookstack
-    container_name: bookstack
-    environment:
-      - PUID=1000
-      - PGID=100
-      - APP_URL=https://wiki.ryandlewis.dev
-      - DB_HOST=bookstack_db
-      - DB_USER=bookstack
-      - DB_DATABASE=bookstackapp
-    env_file: secret.env
-    volumes:
-      - /home/luckierdodge/montecarlo-storage/config/bookstack:/config
-    ports:
-      - 6875:80
-    restart: unless-stopped
-    depends_on:
-      - bookstack_db
-  bookstack_db:
-    image: lscr.io/linuxserver/mariadb
-    container_name: bookstack_db
-    environment:
-      - PUID=1000
-      - PGID=100
-      - TZ=America/Detroit
-      - MYSQL_DATABASE=bookstackapp
-      - MYSQL_USER=bookstack
-    env_file: secret.env
-    volumes:
-      - /home/luckierdodge/montecarlo-storage/config/bookstack_db:/config
-    restart: unless-stopped
+      #grocy:
+      #  image: ghcr.io/linuxserver/grocy
+      #  container_name: grocy
+      #  environment:
+      #    - PUID=1000
+      #    - PGID=100
+      #    - TZ=America/Detroit
+      #  volumes:
+      #    - /home/luckierdodge/killingtime-storage/config/grocy:/config
+      #  ports:
+      #    - 9283:80
+      #  restart: unless-stopped
+      #freshrss:
+      #  image: lscr.io/linuxserver/freshrss:latest
+      #  container_name: freshrss
+      #  environment:
+      #    - PUID=1000
+      #    - PGID=100
+      #    - TZ=America/Detroit
+      #  volumes:
+      #    - /home/luckierdodge/killingtime-storage/config/freshrss:/config
+      #  ports:
+      #    - 9280:80
+      #  restart: unless-stopped
+      #bookstack:
+      #  image: lscr.io/linuxserver/bookstack
+      #  container_name: bookstack
+      #  environment:
+      #    - PUID=1000
+      #    - PGID=100
+      #    - APP_URL=https://wiki.ryandlewis.dev
+      #    - DB_HOST=bookstack_db
+      #    - DB_USER=bookstack
+      #    - DB_DATABASE=bookstackapp
+      #  env_file: secret.env
+      #  volumes:
+      #    - /home/luckierdodge/killingtime-storage/config/bookstack:/config
+      #  ports:
+      #    - 6875:80
+      #  restart: unless-stopped
+      #  depends_on:
+      #    - bookstack_db
+        #bookstack_db:
+        #  image: lscr.io/linuxserver/mariadb
+        #  container_name: bookstack_db
+        #  environment:
+        #    - PUID=1000
+        #    - PGID=100
+        #    - TZ=America/Detroit
+        #    - MYSQL_DATABASE=bookstackapp
+        #    - MYSQL_USER=bookstack
+        #  env_file: secret.env
+        #  volumes:
+        #    - /home/luckierdodge/killingtime-storage/config/bookstack_db:/config
+        #  restart: unless-stopped
   syncthing:
     image: lscr.io/linuxserver/syncthing:latest
     container_name: syncthing
@@ -220,8 +220,8 @@ services:
       - PGID=100
       - TZ=America/Detroit
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/syncthing:/config
-      - /home/luckierdodge/montecarlo-storage/data/syncthing/data:/data
+      - /home/luckierdodge/killingtime-storage/config/syncthing:/config
+      - /home/luckierdodge/killingtime-storage/data/syncthing/data:/data
     ports:
       - 8384:8384
       - 22000:22000/tcp
@@ -234,30 +234,30 @@ services:
     restart: unless-stopped
     env_file: onlyoffice.env
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/onlyoffice/logs:/var/log/onlyoffice
-      - /home/luckierdodge/montecarlo-storage/data/onlyoffice/certs:/var/www/onlyoffice/Data
-      - /home/luckierdodge/montecarlo-storage/data/onlyoffice/onlyoffice:/var/lib/onlyoffice
-      - /home/luckierdodge/montecarlo-storage/data/onlyoffice/postgresql:/var/lib/postgresql
+      - /home/luckierdodge/killingtime-storage/config/onlyoffice/logs:/var/log/onlyoffice
+      - /home/luckierdodge/killingtime-storage/data/onlyoffice/certs:/var/www/onlyoffice/Data
+      - /home/luckierdodge/killingtime-storage/data/onlyoffice/onlyoffice:/var/lib/onlyoffice
+      - /home/luckierdodge/killingtime-storage/data/onlyoffice/postgresql:/var/lib/postgresql
     ports:
       - 8282:80
-  budge:
-    image: lscr.io/linuxserver/budge:latest
-    container_name: budge
-    environment:
-      - PUID=1000
-      - PGID=100
-      - TZ=America/Detroit
-    volumes:
-      - /home/luckierdodge/montecarlo-storage/config/budge:/config
-    ports:
-      - 8980:80
-      - 8943:443
-    restart: unless-stopped
+        #budge:
+        #  image: lscr.io/linuxserver/budge:latest
+        #  container_name: budge
+        #  environment:
+        #    - PUID=1000
+        #    - PGID=100
+        #    - TZ=America/Detroit
+        #  volumes:
+        #    - /home/luckierdodge/killingtime-storage/config/budge:/config
+        #  ports:
+        #    - 8980:80
+        #    - 8943:443
+        #  restart: unless-stopped
   foundryvtt:
     image: felddy/foundryvtt
     container_name: foundryvtt
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/foundryvtt:/data
+      - /home/luckierdodge/killingtime-storage/data/foundryvtt:/data
     ports:
       - 30000:30000
     restart: unless-stopped
@@ -276,19 +276,19 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/nc_postgres:/var/lib/postgresql/data
+      - /home/luckierdodge/killingtime-storage/data/nc_postgres:/var/lib/postgresql/data
   paperless_broker:
     container_name: paperless_broker
     image: docker.io/library/redis:7
     restart: unless-stopped
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_brokerdata:/data
+      - /home/luckierdodge/killingtime-storage/data/paperless/paperless_brokerdata:/data
   paperless_db:
     container_name: paperless_db
     image: docker.io/library/postgres:15
     restart: unless-stopped
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_pgdata:/var/lib/postgresql/data
+      - /home/luckierdodge/killingtime-storage/data/paperless/paperless_pgdata:/var/lib/postgresql/data
     env_file: paperless_db.env
   paperless_webserver:
     container_name: paperless_webserver
@@ -307,10 +307,10 @@ services:
       timeout: 10s
       retries: 5
     volumes:
-      - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_data:/usr/src/paperless/data
-      - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_media:/usr/src/paperless/media
-      - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_export:/usr/src/paperless/export
-      - /home/luckierdodge/montecarlo-storage/data/paperless/paperless_consume:/usr/src/paperless/consume
+      - /home/luckierdodge/killingtime-storage/data/paperless/paperless_data:/usr/src/paperless/data
+      - /home/luckierdodge/killingtime-storage/data/paperless/paperless_media:/usr/src/paperless/media
+      - /home/luckierdodge/killingtime-storage/data/paperless/paperless_export:/usr/src/paperless/export
+      - /home/luckierdodge/killingtime-storage/data/paperless/paperless_consume:/usr/src/paperless/consume
     env_file: paperless_webserver.env
     environment:
       PAPERLESS_REDIS: redis://paperless_broker:6379
@@ -343,8 +343,27 @@ services:
     environment:
       - TZ=US/New York
     volumes:
-      - /home/luckierdodge/montecarlo-storage/config/etc-pihole/:/etc/pihole
-      - /home/luckierdodge/montecarlo-storage/config/etc-dnsmasq.d/etc/dnsmasq.d
+      - /home/luckierdodge/killingtime-storage/config/etc-pihole/:/etc/pihole
+      - /home/luckierdodge/killingtime-storage/config/etc-dnsmasq.d/etc/dnsmasq.d
     dns:
         - 127.0.0.1
         - 1.1.1.1
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=US/Chicago
+      - JELLYFIN_PublishedServerUrl=jellyfin.ryandlewis.dev #optional
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/jellyfin:/config
+      - /home/luckierdodge/havoc-data/media/tv:/data/tvshows
+      - /home/luckierdodge/havoc-data/media/movies:/data/movies
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
+

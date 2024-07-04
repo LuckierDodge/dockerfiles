@@ -1,8 +1,0 @@
-secret.env
-vaultwarden.env
-foundryvtt.env
-onlyoffice.env
-nextcloud_posgres.env
-paperless_db.env
-paperless_webserver.env
-*.zip
