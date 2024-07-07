@@ -399,6 +399,7 @@ services:
     # Check https://github.com/offen/docker-volume-backup/releases
     # for a list of available releases.
     image: offen/docker-volume-backup:v2.39.1
+    container_name: backup
     restart: unless-stopped
     env_file: ./backup.env # see below for configuration reference
     volumes:
