@@ -1,4 +1,3 @@
-version: '3.4'
 services:
   sonarr:
     image: linuxserver/sonarr
@@ -57,7 +56,7 @@ services:
       - AUTOHEAL_INTERVAL=30
       - AUTOHEAL_START_PERIOD=60
       - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
-    volumes: 
+    volumes:
           - /var/run/docker.sock:/var/run/docker.sock
   ombi:
     image: ghcr.io/linuxserver/ombi
@@ -267,7 +266,7 @@ services:
     labels:
       - docker-volume-backup.stop-during-backup=true
   foundryvtt:
-    image: felddy/foundryvtt
+    image: felddy/foundryvtt:11
     container_name: foundryvtt
     volumes:
       - /home/luckierdodge/killingtime-storage/data/foundryvtt:/data
@@ -419,4 +418,76 @@ services:
       - /home/luckierdodge/killingtime-backup/volumes:/archive
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - 8123:8123
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/mqtt/config:/mosquitto/config
+      - /home/luckierdodge/killingtime-storage/data/mqtt/data:/mosquitto/data
+      - /home/luckierdodge/killingtime-storage/data/mqtt/log:/mosquitto/log
+    ports:
+      - 1883:1883
+      - 9001:9001
+    stdin_open: true
+    tty: true
+  protonvpn:
+    image: ghcr.io/tprasadtp/protonwire
+    container_name: protonvpn
+    restart: unless-stopped
+    env_file: ./protonvpn.env
+    cap_add: [NET_ADMIN]
+    ports:
+      - 9117:9117
+      - 7070:7070
+      - 6881:6881
+    sysctls:
+      ["net.ipv6.conf.all.disable_ipv6=1", "net.ipv4.conf.all.rp_filter=2"]
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp:/tmp:z
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    depends_on: ["protonvpn"]
+    network_mode: service:protonvpn
+    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
+    restart: no
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+      - AUTO_UPDATE=true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/luckierdodge/killingtime-storage/config/jackett/config:/config:z
+      #- ${TORRENT_BLACKHOLE_FOLDER}:/blackhole:z
+  qbittorrent:
+    image: linuxserver/qbittorrent
+    container_name: qbittorrent
+    depends_on: ["protonvpn"]
+    network_mode: service:protonvpn
+    sysctls: ["net.ipv6.conf.all.disable_ipv6=1"]
+    restart: no
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+      - WEBUI_PORT=7070
+      - TORRENTING_PORT=6881
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/luckierdodge/killingtime-storage/config/qbittorrent/config:/config:z
+      - /home/luckierdodge/havoc-data/media/downloads:/media/downloads:z
+      - /home/luckierdodge/havoc-data/media/movies:/media/movies:z
+      - /home/luckierdodge/havoc-data/media/tv:/media/tv:z

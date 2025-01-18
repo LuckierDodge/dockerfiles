@@ -1,34 +1,34 @@
-version: '3'
 services:
-  #    core-keeper:
-  #      image: luckierdodge/core-keeper-dedicated
-  #      volumes:
-  #        - /home/luckierdodge/montecarlo-storage/game-servers/core-keeper/server-files:/home/steam/core-keeper-dedicated
-  #        - /home/luckierdodge/montecarlo-storage/game-servers/core-keeper/server-data:/home/steam/core-keeper-data
-  #      env_file:
-  #        - ./core.env
-  #      restart: unless-stopped
-  #      stop_grace_period: 1m
-  satisfactory-server:
-        container_name: 'satisfactory-server'
-        hostname: 'satisfactory-server'
-        image: 'wolveix/satisfactory-server:latest'
-        ports:
-            - '7777:7777/udp'
-            - '15000:15000/udp'
-            - '15777:15777/udp'
-        volumes:
-            - '/home/luckierdodge/killingtime-storage/game-servers/satisfactory:/config'
-        environment:
-            - MAXPLAYERS=10
-            - PGID=100
-            - PUID=1000
-            - STEAMBETA=false
-            - AUTOPAUSE=false
-        restart: unless-stopped
-        deploy:
-          resources:
-            limits:
-              memory: 6G
-            reservations:
-              memory: 4G
+  core-keeper:
+    image: escaping/core-keeper-dedicated
+    volumes:
+      - /home/luckierdodge/killingtime-storage/game-servers/core-keeper/server-files:/home/steam/core-keeper-dedicated
+      - /home/luckierdodge/killingtime-storage/game-servers/core-keeper/server-data:/home/steam/core-keeper-data
+    env_file:
+      - ./core.env
+    restart: unless-stopped
+    stop_grace_period: 1m
+      #satisfactory-server:
+      #      container_name: 'satisfactory-server'
+      #      hostname: 'satisfactory-server'
+      #      image: 'wolveix/satisfactory-server:latest'
+      #      ports:
+      #          - '7777:7777/udp'
+      #          - '15000:15000/udp'
+      #          - '15777:15777/udp'
+      #      volumes:
+      #          - '/home/luckierdodge/killingtime-storage/game-servers/satisfactory:/config'
+      #      environment:
+      #          - MAXPLAYERS=10
+      #          - PGID=100
+      #          - PUID=1000
+      #          - STEAMBETA=false
+      #          - AUTOPAUSE=false
+      #      restart: unless-stopped
+      #      deploy:
+      #        resources:
+      #          limits:
+      #            memory: 6G
+      #          reservations:
+      #            memory: 4G
+
