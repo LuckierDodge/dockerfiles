@@ -1,89 +1,59 @@
-version: '2'
 services:
-    autoheal:
-        container_name: autoheal
-        image: willfarrell/autoheal
-        restart: unless-stopped
-        environment:
-            - AUTOHEAL_CONTAINER_LABEL=all
-            - AUTOHEAL_INTERVAL=30
-            - AUTOHEAL_START_PERIOD=60
-            - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
-        volumes: 
-            - /var/run/docker.sock:/var/run/docker.sock
-              #    smokeping:
-              #        image: ghcr.io/linuxserver/smokeping
-              #        container_name: smokeping
-              #        environment: 
-              #          - PUID=1000
-              #          - PGID=100
-              #          - TZ=US/New York
-              #        volumes:
-              #          - /home/luckierdodge/daishi-storage/config/smokeping/config:/config
-              #          - /home/luckierdodge/daishi-storage/data/smokeping/data:/data
-              #        ports:
-              #          - 8888:80
-              #        restart: unless-stopped
-    swag:
-        image: linuxserver/swag
-        container_name: swag
-        cap_add:
-          - NET_ADMIN
-        environment:
-          - PUID=1000
-          - PGID=100
-          - TZ=US/New York
-          - URL=ryandlewis.dev
-          - SUBDOMAINS=heimdall,warden,request,cloud,office,foundry,jellyfin,plex
-          - ONLY_SUBDOMAINS=true
-          - VALIDATION=http
-        volumes:
-          - /home/luckierdodge/cerberus-storage/config/swag:/config
-        ports:
-          - 443:443
-          - 80:80
-        restart: unless-stopped
-          #proxy_7777:
-          #    image: henkelmax/proxy
-          #    environment:
-          #      - LOCAL_PORT=7777
-          #      - REMOTE_PORT=7777
-          #      - REMOTE_IP=100.106.110.88
-          #      - PROTOCOL=udp
-          #    ports:
-          #      - 7777:7777/udp
-          #proxy_15000:
-          #    image: henkelmax/proxy
-          #    environment:
-          #      - LOCAL_PORT=15000
-          #      - REMOTE_PORT=15000
-          #      - REMOTE_IP=100.106.110.88
-          #      - PROTOCOL=udp
-          #    ports:
-          #      - 15000:15000/udp
-          #proxy_15777:
-          #    image: henkelmax/proxy
-          #    environment:
-          #      - LOCAL_PORT=15777
-          #      - REMOTE_PORT=15777
-          #      - REMOTE_IP=100.106.110.88
-          #      - PROTOCOL=udp
-          #    ports:
-          #      - 15777:15777/udp
-        #    prometheus:
-        #        image: prom/prometheus
-        #        container_name: prometheus
-        #        ports:
-        #          - 9090:9090
-        #        volumes:
-        #          - /home/luckierdodge/riskrunner-config/prometheus:/etc/prometheus
-        #        restart: unless-stopped
-        #    grafana:
-        #        image: grafana/grafana
-        #        container_name: grafana
-        #        ports:
-        #          - 3000:3000
-        #        volumes:
-        #          - /home/luckierdodge/riskrunner-config/grafana:/var/lib/grafana
-        #        restart: unless-stopped
-        #        user: "1000:1000"
+  autoheal:
+    container_name: autoheal
+    image: willfarrell/autoheal
+    restart: unless-stopped
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+      - AUTOHEAL_INTERVAL=30
+      - AUTOHEAL_START_PERIOD=60
+      - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
+  smokeping:
+    image: ghcr.io/linuxserver/smokeping
+    container_name: smokeping
+    environment: 
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+    volumes:
+      - /home/luckierdodge/cerberus-storage/config/smokeping/config:/config
+      - /home/luckierdodge/cerberus-storage/data/smokeping/data:/data
+    ports:
+      - 8888:80
+    restart: unless-stopped
+  swag:
+    image: linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+      - URL=ryandlewis.dev
+      - SUBDOMAINS=heimdall,warden,request,cloud,office,foundry,jellyfin,plex
+      - ONLY_SUBDOMAINS=true
+      - VALIDATION=http
+      - EMAIL=public+letsencrypt@ryandlewis.dev
+    volumes:
+      - /home/luckierdodge/cerberus-storage/config/swag:/config
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:latest
+    container_name: librespeed
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+      - PASSWORD=${LIBRESPEED_PASSWORD:-supersecretpassword}
+    volumes:
+      - /home/luckierdodge/cerberus-storage/config/librespeed/config:/config
+    ports:
+      - 8889:80
+    restart: unless-stopped
+
