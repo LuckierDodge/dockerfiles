@@ -48,7 +48,8 @@ services:
       - /dev/sdg:/dev/sdg
       - /dev/sdh:/dev/sdh
       - /dev/sdi:/dev/sdi
-      - /dev/sdj:/dev/sdj
+      #- /dev/sdj:/dev/sdj
+      - /dev/sdi:/dev/sdi
     restart: unless-stopped
   autoheal:
     container_name: autoheal
