@@ -363,7 +363,7 @@ services:
       - 53:53/udp
       - 8880:80
     environment:
-      - TZ=US/New York
+      - TZ=America/Chicago
     volumes:
       - /home/luckierdodge/killingtime-storage/config/etc-pihole/:/etc/pihole
       - /home/luckierdodge/killingtime-storage/config/etc-dnsmasq.d/etc/dnsmasq.d
@@ -378,7 +378,7 @@ services:
     environment:
       - PUID=1000
       - PGID=100
-      - TZ=US/Chicago
+      - TZ=America/Chicago
       - JELLYFIN_PublishedServerUrl=jellyfin.ryandlewis.dev #optional
     volumes:
       - /home/luckierdodge/killingtime-storage/config/jellyfin:/config
@@ -441,6 +441,46 @@ services:
       - 9001:9001
     stdin_open: true
     tty: true
+  openwakeword:
+    image: rhasspy/wyoming-openwakeword:latest
+    container_name: openwakeword
+    restart: unless-stopped
+    ports:
+      - 10400:10400
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/openwakeword:/config
+      - /home/luckierdodge/killingtime-storage/data/openwakeword:/custom
+    command: --preload-model 'hey_mycroft' --custom-model-dir /custom --uri 'tcp://0.0.0.0:10400' --threshold 0.7 --trigger-level 2 --debug
+  piper:
+    image: lscr.io/linuxserver/piper:latest
+    container_name: piper
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+      - PIPER_VOICE=en_US-lessac-medium
+      - PIPER_LENGTH=1.0 #optional
+      - PIPER_NOISE=0.667 #optional
+      - PIPER_NOISEW=0.333 #optional
+      - PIPER_SPEAKER=0 #optional
+      - PIPER_PROCS=1 #optional
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/piper:/config
+    ports:
+      - 10200:10200
+    restart: unless-stopped
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome
+    volumes:
+      - /home/luckierdodge/killintime-storage/config/esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      - USERNAME=luckierdodge
+      - PASSWORD=${ESP_HOME_PASSWORD:-changeme}
   protonvpn:
     image: ghcr.io/tprasadtp/protonwire
     container_name: protonvpn
