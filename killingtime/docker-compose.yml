@@ -473,7 +473,7 @@ services:
     container_name: esphome
     image: ghcr.io/esphome/esphome
     volumes:
-      - /home/luckierdodge/killintime-storage/config/esphome:/config
+      - /home/luckierdodge/killingtime-storage/config/esphome:/config
       - /etc/localtime:/etc/localtime:ro
     restart: unless-stopped
     privileged: true
