@@ -296,6 +296,18 @@ services:
     env_file: foundryvtt.env
     labels:
       - docker-volume-backup.stop-during-backup=true
+  neofoundryvtt:
+    image: felddy/foundryvtt:13
+    container_name: neofoundryvtt
+    volumes:
+      - /home/luckierdodge/killingtime-storage/data/neofoundryvtt:/data
+    user: 1000:100
+    ports:
+      - 30001:30000
+    restart: unless-stopped
+    env_file: neofoundryvtt.env
+    labels:
+      - docker-volume-backup.stop-during-backup=true
   redis:
     container_name: redis
     image: redis
@@ -448,8 +460,9 @@ services:
       - /run/dbus:/run/dbus:ro
     restart: unless-stopped
     privileged: true
-    ports:
-      - 8123:8123
+    network_mode: host
+    #ports:
+    #  - 8123:8123
     labels:
       - docker-volume-backup.stop-during-backup=true
   mqtt:
@@ -512,6 +525,22 @@ services:
       - PASSWORD=${ESP_HOME_PASSWORD:-changeme}
     labels:
       - docker-volume-backup.stop-during-backup=true
+  matter_server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: matter_server
+    restart: unless-stopped
+    # Required for mDNS to work correctly
+    network_mode: host
+    security_opt:
+      # Needed for Bluetooth via dbus
+      - apparmor:unconfined
+    volumes:
+      # Create an .env file that sets the USERDIR environment variable.
+      - /home/luckierdodge/killingtime-storage/data/matter-server/data:/data/
+      # Required for Bluetooth via D-Bus
+      - /run/dbus:/run/dbus:ro
+    # If you adjust command line, make sure to pass the default CMD arguments too:
+    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
   gluetun:
     image: qmcgaw/gluetun
     container_name: gluetun
@@ -585,6 +614,7 @@ services:
       - /home/luckierdodge/havoc-data/media/downloads:/media/downloads:z
       - /home/luckierdodge/havoc-data/media/movies:/media/movies:z
       - /home/luckierdodge/havoc-data/media/tv:/media/tv:z
+      - /home/luckierdodge/havoc-data/media/music:/media/music:z
     labels:
       - docker-volume-backup.stop-during-backup=true
   uptimekuma:
@@ -597,4 +627,13 @@ services:
       - /home/luckierdodge/killingtime-storage/data/uptimekuma:/app/data
     labels:
       - docker-volume-backup.stop-during-backup=true
+
+#networks:
+#  app_net:
+#    driver: bridge
+#    enable_ipv6: true
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: "fd00:2::/64"
 
