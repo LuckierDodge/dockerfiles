@@ -1,0 +1,100 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    #ports:
+    #  - 8123:8123
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/mqtt/config:/mosquitto/config
+      - /home/luckierdodge/killingtime-storage/data/mqtt/data:/mosquitto/data
+      - /home/luckierdodge/killingtime-storage/data/mqtt/log:/mosquitto/log
+    ports:
+      - 1883:1883
+      - 9001:9001
+    stdin_open: true
+    tty: true
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  openwakeword:
+    image: rhasspy/wyoming-openwakeword:latest
+    container_name: openwakeword
+    restart: unless-stopped
+    ports:
+      - 10400:10400
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/openwakeword:/config
+      - /home/luckierdodge/killingtime-storage/data/openwakeword:/custom
+    command: --preload-model 'hey_mycroft' --custom-model-dir /custom --uri 'tcp://0.0.0.0:10400' --threshold 0.7 --trigger-level 2 --debug
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  piper:
+    image: lscr.io/linuxserver/piper:latest
+    container_name: piper
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+      - PIPER_VOICE=en_US-lessac-medium
+      - PIPER_LENGTH=1.0 #optional
+      - PIPER_NOISE=0.667 #optional
+      - PIPER_NOISEW=0.333 #optional
+      - PIPER_SPEAKER=0 #optional
+      - PIPER_PROCS=1 #optional
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/piper:/config
+    ports:
+      - 10200:10200
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      - USERNAME=luckierdodge
+      - PASSWORD=${ESP_HOME_PASSWORD:-changeme}
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  matter_server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: matter_server
+    restart: unless-stopped
+    # Required for mDNS to work correctly
+    network_mode: host
+    security_opt:
+      # Needed for Bluetooth via dbus
+      - apparmor:unconfined
+    volumes:
+      # Create an .env file that sets the USERDIR environment variable.
+      - /home/luckierdodge/killingtime-storage/data/matter-server/data:/data/
+      # Required for Bluetooth via D-Bus
+      - /run/dbus:/run/dbus:ro
+    # If you adjust command line, make sure to pass the default CMD arguments too:
+    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
+
+#networks:
+#  app_net:
+#    driver: bridge
+#    enable_ipv6: true
+#    ipam:
+#      driver: default
+#      config:
+#        - subnet: "fd00:2::/64"

@@ -1,0 +1,139 @@
+services:
+  calibre:
+    image: ghcr.io/linuxserver/calibre
+    container_name: calibre
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+      - PASSWORD=Simple123
+      - UMASK_SET=022
+    volumes:
+      - /home/luckierdodge/killingtime-storage/data/nextcloud/luckierdodge/files/Library:/Library
+      - /home/luckierdodge/killingtime-storage/data/calibre:/config
+      - /home/luckierdodge/media-storage/books:/books
+    ports:
+      - 8080:8080
+      - 8081:8081
+      - 9090:9090
+      - 9091:9091
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  calibre-web:
+    image: ghcr.io/linuxserver/calibre-web
+    container_name: calibre-web
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+      - DOCKER_MODS=linuxserver/calibre-web:calibre
+    volumes:
+      - /home/luckierdodge/killingtime-storage/data/calibre-web:/config
+      - /home/luckierdodge/killingtime-storage/data/calibre:/books
+    ports:
+      - 8083:8083
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    env_file: vaultwarden.env
+    volumes:
+      - /home/luckierdodge/killingtime-storage/data/vaultwarden:/data
+    ports:
+      - 28080:80
+      - 23012:3012
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  nextcloud:
+    image: ghcr.io/linuxserver/nextcloud
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/nextcloud:/config
+      - /home/luckierdodge/killingtime-storage/data/nextcloud:/data
+    ports:
+      - 21443:443
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+  nc_postgres:
+    container_name: nc_postgres
+    image: postgres:15
+    restart: unless-stopped
+    env_file: nextcloud_postgres.env
+    ports:
+      - 5432:5432
+    volumes:
+      - /home/luckierdodge/killingtime-storage/data/nc_postgres:/var/lib/postgresql/data
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  onlyoffice:
+    image: onlyoffice/documentserver
+    container_name: onlyoffice
+    restart: unless-stopped
+    env_file: onlyoffice.env
+    volumes:
+      - /home/luckierdodge/killingtime-storage/config/onlyoffice/logs:/var/log/onlyoffice
+      - /home/luckierdodge/killingtime-storage/data/onlyoffice/certs:/var/www/onlyoffice/Data
+      - /home/luckierdodge/killingtime-storage/data/onlyoffice/onlyoffice:/var/lib/onlyoffice
+      - /home/luckierdodge/killingtime-storage/data/onlyoffice/postgresql:/var/lib/postgresql
+    ports:
+      - 8282:80
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+      #freshrss:
+      #  image: lscr.io/linuxserver/freshrss:latest
+      #  container_name: freshrss
+      #  environment:
+      #    - PUID=1000
+      #    - PGID=100
+      #    - TZ=America/Chicago
+      #  volumes:
+      #    - /home/luckierdodge/killingtime-storage/config/freshrss:/config
+      #  ports:
+      #    - 9280:80
+      #  restart: unless-stopped
+      #bookstack:
+      #  image: lscr.io/linuxserver/bookstack
+      #  container_name: bookstack
+      #  environment:
+      #    - PUID=1000
+      #    - PGID=100
+      #    - APP_URL=https://wiki.ryandlewis.dev
+      #    - DB_HOST=bookstack_db
+      #    - DB_USER=bookstack
+      #    - DB_DATABASE=bookstackapp
+      #  env_file: secret.env
+      #  volumes:
+      #    - /home/luckierdodge/killingtime-storage/config/bookstack:/config
+      #  ports:
+      #    - 6875:80
+      #  restart: unless-stopped
+      #  depends_on:
+      #    - bookstack_db
+        #bookstack_db:
+        #  image: lscr.io/linuxserver/mariadb
+        #  container_name: bookstack_db
+        #  environment:
+        #    - PUID=1000
+        #    - PGID=100
+        #    - TZ=America/Chicago
+        #    - MYSQL_DATABASE=bookstackapp
+        #    - MYSQL_USER=bookstack
+        #  env_file: secret.env
+        #  volumes:
+        #    - /home/luckierdodge/killingtime-storage/config/bookstack_db:/config
+        #  restart: unless-stopped
