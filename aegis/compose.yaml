@@ -1,0 +1,145 @@
+include:
+  - ./compose.media.yaml
+  - ./compose.office.yaml
+  - ./compose.paperless.yaml
+services:
+  autoheal:
+    container_name: autoheal
+    image: willfarrell/autoheal
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+      - AUTOHEAL_INTERVAL=30
+      - AUTOHEAL_START_PERIOD=60
+      - AUTOHEAL_DEFAULT_STOP_TIMEOUT=30
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  heimdall:
+    image: ghcr.io/linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+    volumes:
+      - ${DATA_DIR}/heimdall/config:/config
+    ports:
+      - 11180:80
+      - 11443:443
+    restart: unless-stopped
+    links:
+      - "paperless_webserver:paperless.local"
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  grocy:
+    image: ghcr.io/linuxserver/grocy
+    container_name: grocy
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+    volumes:
+      - ${DATA_DIR}/grocy:/config
+    ports:
+      - 9283:80
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    hostname: aegis_sync #optional
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+    volumes:
+      - ${DATA_DIR}/syncthing/config:/config
+      - ${DATA_DIR}/syncthing/data:/data
+    ports:
+      - 8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  foundryvtt:
+    image: felddy/foundryvtt:11
+    container_name: foundryvtt
+    volumes:
+      - ${DATA_DIR}/foundryvtt/data:/data
+    ports:
+      - 30000:30000
+    restart: unless-stopped
+    env_file: foundryvtt.env
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  neofoundryvtt:
+    image: felddy/foundryvtt:13
+    container_name: neofoundryvtt
+    volumes:
+      - ${DATA_DIR}/neofoundryvtt/data:/data
+    user: 1000:100
+    ports:
+      - 30001:30000
+    restart: unless-stopped
+    env_file: neofoundryvtt.env
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 8880:80
+    environment:
+      - TZ=America/Chicago
+    env_file: pihole.env
+    volumes:
+      - ${DATA_DIR}/pihole/etc-pihole/:/etc/pihole
+      - ${DATA_DIR}/pihole/etc-dnsmasq.d/etc/dnsmasq.d
+    dns:
+        - 127.0.0.1
+        - 1.1.1.1
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  backup:
+    # In production, it is advised to lock your image tag to a proper
+    # release version instead of using `latest`.
+    # Check https://github.com/offen/docker-volume-backup/releases
+    # for a list of available releases.
+    image: offen/docker-volume-backup:v2.43.1
+    container_name: backup
+    restart: unless-stopped
+    env_file: ./backup.env # see below for configuration reference
+    volumes:
+      - ${DATA_DIR}:/backup/data_dir:ro
+      # Mounting the Docker socket allows the script to stop and restart
+      # the container during backup and to access the container labels to
+      # specify custom commands. You can omit this if you don't want to
+      # stop the container or run custom commands. In case you need to
+      # proxy the socket, you can also provide a location by setting
+      # `DOCKER_HOST` in the container
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # If you mount a local directory or volume to `/archive` a local
+      # copy of the backup will be stored there. You can override the
+      # location inside of the container by setting `BACKUP_ARCHIVE`.
+      # You can omit this if you do not want to keep local backups.
+      - ${STORAGE_BACKUP}/volumes:/archive
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+  uptimekuma:
+    image: louislam/uptime-kuma
+    container_name: uptimekuma
+    restart: unless-stopped
+    ports:
+      - 3001:3001
+    volumes:
+      - ${DATA_DIR}/uptimekuma/data:/app/data
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+
