@@ -13,6 +13,8 @@ services:
     #  - 8123:8123
     labels:
       - docker-volume-backup.stop-during-backup=true
+    profiles:
+      - donotstart
   mqtt:
     image: eclipse-mosquitto
     container_name: mqtt
@@ -20,13 +22,16 @@ services:
       - /home/luckierdodge/killingtime-storage/config/mqtt/config:/mosquitto/config
       - /home/luckierdodge/killingtime-storage/data/mqtt/data:/mosquitto/data
       - /home/luckierdodge/killingtime-storage/data/mqtt/log:/mosquitto/log
-    ports:
-      - 1883:1883
-      - 9001:9001
+    network_mode: host
+    #ports:
+    #  - 1883:1883
+    #  - 9001:9001
     stdin_open: true
     tty: true
     labels:
       - docker-volume-backup.stop-during-backup=true
+    profiles:
+      - donotstart
   openwakeword:
     image: rhasspy/wyoming-openwakeword:latest
     container_name: openwakeword
@@ -39,6 +44,8 @@ services:
     command: --preload-model 'hey_mycroft' --custom-model-dir /custom --uri 'tcp://0.0.0.0:10400' --threshold 0.7 --trigger-level 2 --debug
     labels:
       - docker-volume-backup.stop-during-backup=true
+    profiles:
+      - donotstart
   piper:
     image: lscr.io/linuxserver/piper:latest
     container_name: piper
@@ -59,6 +66,8 @@ services:
     restart: unless-stopped
     labels:
       - docker-volume-backup.stop-during-backup=true
+    profiles:
+      - donotstart
   esphome:
     container_name: esphome
     image: ghcr.io/esphome/esphome
@@ -73,6 +82,8 @@ services:
       - PASSWORD=${ESP_HOME_PASSWORD:-changeme}
     labels:
       - docker-volume-backup.stop-during-backup=true
+    profiles:
+      - donotstart
   matter_server:
     image: ghcr.io/home-assistant-libs/python-matter-server:stable
     container_name: matter_server
@@ -89,6 +100,8 @@ services:
       - /run/dbus:/run/dbus:ro
     # If you adjust command line, make sure to pass the default CMD arguments too:
     #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
+    profiles:
+      - donotstart
 
 #networks:
 #  app_net:
