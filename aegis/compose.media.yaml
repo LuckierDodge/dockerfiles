@@ -16,6 +16,7 @@ services:
       - ${DATA_DIR}/plex/transcode:/transcode
       - ${DOWNLOADS_DIR}/media:/data
       - ${MEDIA_DIR}:/media-storage
+      - ${MEDIA_DIR_JAINA}:/jaina-media
       - ${DATA_DIR}/nextcloud/data/luckierdodge/files/Music:/music
       - ${DATA_DIR}/nextcloud/data/luckierdodge/files/Pictures:/Pictures
     labels:
@@ -113,6 +114,7 @@ services:
       - ${DATA_DIR}/jellyfin/config:/config
       - ${DOWNLOADS_DIR}/media/tv:/data/tvshows
       - ${DOWNLOADS_DIR}/media/movies:/data/movies
+      - ${MEDIA_DIR_JAINA}:/data/jaina-media
     ports:
       - 8096:8096
       - 8920:8920 #optional
