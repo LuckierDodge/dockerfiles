@@ -29,7 +29,7 @@ services:
       - TZ=America/Chicago
       - DOCKER_MODS=linuxserver/calibre-web:calibre
     volumes:
-      - ${DATA_DIR}calibre-web/config:/config
+      - ${DATA_DIR}/calibre-web/config:/config
       - ${DATA_DIR}/calibre/config:/books
     ports:
       - 8083:8083
