@@ -2,6 +2,11 @@ include:
   - ./compose.media.yaml
   - ./compose.office.yaml
   - ./compose.paperless.yaml
+  - path: ./immich/compose.immich.yaml
+    env_file:
+      - ./.env
+      - ./immich/immich.env
+    project_directory: ./immich
 services:
   autoheal:
     container_name: autoheal
@@ -32,6 +37,28 @@ services:
       - "paperless_webserver:paperless.local"
     labels:
       - docker-volume-backup.stop-during-backup=true
+  homarr:
+    container_name: homarr
+    image: ghcr.io/homarr-labs/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Optional, only if you want docker integration
+      - ${DATA_DIR}/homarr/appdata:/appdata
+    environment:
+      - SECRET_ENCRYPTION_KEY=3f22a0557db7719892f41f9b3c1de5d5204ec36d69622933b95452da317c7b57
+    ports:
+      - '7575:7575'
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  dash:
+    container_name: dash
+    image: mauricenino/dashdot:latest
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - '3002:3001'
+    volumes:
+      - /:/mnt/host:ro
   grocy:
     image: ghcr.io/linuxserver/grocy
     container_name: grocy
