@@ -106,7 +106,7 @@ services:
     labels:
       - docker-volume-backup.stop-during-backup=true
   neofoundryvtt:
-    image: felddy/foundryvtt:13
+    image: felddy/foundryvtt:14
     container_name: neofoundryvtt
     volumes:
       - ${DATA_DIR}/neofoundryvtt/data:/data
