@@ -83,6 +83,12 @@
         container: syncthing
         server: my-docker
         description: File synchronization
+    - Code Server:
+        href: http://aegis:8443
+        icon: vscode.png
+        container: code-server
+        server: my-docker
+        description: VS Code in the browser
 
 - Gaming:
     - FoundryVTT:
