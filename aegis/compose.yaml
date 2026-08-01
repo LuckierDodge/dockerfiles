@@ -218,5 +218,5 @@ services:
       - /dev/sda:/dev/sda
       - /dev/sdb:/dev/sdb
       - /dev/sdc:/dev/sdc
-      - /dev/sdf:/dev/sdf
+      - /dev/sdd:/dev/sdd
     restart: unless-stopped

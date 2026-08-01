@@ -47,6 +47,12 @@
         container: nzbget
         server: my-docker
         description: Usenet client
+    - Audiobookshelf:
+        href: https://audiobookshelf.ryandlewis.dev
+        icon: audiobookshelf.png
+        container: audiobookshelf
+        server: my-docker
+        description: Audiobooks and podcasts
     - Ombi:
         href: https://request.ryandlewis.dev
         icon: ombi.png

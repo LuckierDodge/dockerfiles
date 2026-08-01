@@ -96,6 +96,15 @@ endpoints:
     alerts:
       - type: discord
 
+  - name: audiobookshelf
+    group: aegis
+    url: http://aegis:13378
+    interval: 60s
+    conditions:
+      - "[STATUS] == 200"
+    alerts:
+      - type: discord
+
   - name: qbittorrent
     group: aegis
     url: http://aegis:7070

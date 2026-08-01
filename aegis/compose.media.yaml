@@ -199,3 +199,28 @@ services:
       - ${DOWNLOADS_DIR}/media/music:/media/music:z
     labels:
       - docker-volume-backup.stop-during-backup=true
+  audiobookshelf:
+    container_name: audiobookshelf
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    ports:
+      - 13378:80
+    volumes:
+      # These volumes are needed to keep your library persistent
+      # and allow media to be accessed by the ABS server.
+      - ${DATA_DIR}/audiobookshelf/config:/config
+      - ${DATA_DIR}/audiobookshelf/metadata:/metadata
+      # The path to the left of the colon is the path on your computer,
+      # and the path to the right of the colon is where the data is
+      # available to ABS in Docker. You can change these lines freely
+      # or add additional mounts for additional libraries.
+      - ${MEDIA_DIR}/audiobooks:/audiobooks
+      - ${MEDIA_DIR}/podcasts:/podcasts
+    environment:
+      - TZ=America/Chicago
+      # Add other environment variables here
+    restart: unless-stopped
+    # Audiobookshelf does not use PUID or GUID environment variables.
+    # To run as a different user, use the following directive.
+    user: 1000:100
+    labels:
+      - docker-volume-backup.stop-during-backup=true
