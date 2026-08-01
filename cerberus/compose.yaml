@@ -33,7 +33,7 @@ services:
       - PGID=100
       - TZ=America/Chicago
       - URL=ryandlewis.dev
-      - SUBDOMAINS=warden,request,cloud,foundry,jellyfin,plex,neofoundry,immich
+      - SUBDOMAINS=warden,request,cloud,foundry,jellyfin,plex,neofoundry,immich,audiobookshelf
       - ONLY_SUBDOMAINS=true
       - VALIDATION=http
       - EMAIL=public+letsencrypt@ryandlewis.dev
