@@ -106,7 +106,7 @@ services:
     labels:
       - docker-volume-backup.stop-during-backup=true
   neofoundryvtt:
-    image: felddy/foundryvtt:13
+    image: felddy/foundryvtt:14
     container_name: neofoundryvtt
     volumes:
       - ${DATA_DIR}/neofoundryvtt/data:/data
@@ -171,6 +171,29 @@ services:
   #    - ${DATA_DIR}/uptimekuma/data:/app/data
   #  labels:
   #    - docker-volume-backup.stop-during-backup=true
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=America/Chicago
+      - DEFAULT_WORKSPACE=/config/workspace
+    env_file: code-server.env
+    volumes:
+      - ${DATA_DIR}/code-server/config:/config
+      - ${DATA_DIR}:/config/workspace/data
+      - ${STORAGE_DIR}:/config/workspace/storage
+      - ${BACKUP_DIR}:/config/workspace/backup
+      - ${REPO_DIR}:/config/workspace/repos
+      - ${MEDIA_DIR}:/config/workspace/media
+      - ${MEDIA_DIR_JAINA}:/config/workspace/media-jaina
+      - ${DOWNLOADS_DIR}:/config/workspace/downloads
+    ports:
+      - 8443:8443
+    restart: unless-stopped
+    labels:
+      - docker-volume-backup.stop-during-backup=true
   scrutiny:
     image: ghcr.io/analogj/scrutiny:master-omnibus
     container_name: scrutiny
@@ -195,5 +218,5 @@ services:
       - /dev/sda:/dev/sda
       - /dev/sdb:/dev/sdb
       - /dev/sdc:/dev/sdc
-      - /dev/sdd:/dev/sdd
+      - /dev/sdf:/dev/sdf
     restart: unless-stopped

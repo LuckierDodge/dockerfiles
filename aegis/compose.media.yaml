@@ -119,7 +119,7 @@ services:
       - 8096:8096
       - 8920:8920 #optional
       - 7359:7359/udp #optional
-      - 1900:1900/udp #optional
+      #- 1900:1900/udp #optional # DLNA — conflicts with host Spotify SSDP bind
     restart: unless-stopped
     labels:
       - docker-volume-backup.stop-during-backup=true

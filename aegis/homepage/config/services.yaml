@@ -83,6 +83,12 @@
         container: syncthing
         server: my-docker
         description: File synchronization
+    - Code Server:
+        href: http://aegis:8443
+        icon: vscode.png
+        container: code-server
+        server: my-docker
+        description: VS Code in the browser
 
 - Gaming:
     - FoundryVTT:
@@ -111,11 +117,15 @@
         container: scrutiny
         server: my-docker
         description: Drive health monitoring
-    - Gatus:
+    - Gatus (Aegis):
         href: http://aegis:8090
         icon: gatus.png
         container: gatus
         server: my-docker
+        description: Uptime monitoring
+    - Gatus (Cerberus):
+        href: http://cerberus:8090
+        icon: gatus.png
         description: Uptime monitoring
 
 - Cerberus:
